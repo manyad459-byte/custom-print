@@ -1,0 +1,42 @@
+.login-btn {
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  font-weight: 600;
+  color: white;
+
+  display: block;
+  margin: 20px auto;
+  padding: 12px 40px;
+  font-size: 16px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* matching your app purple theme */
+  background: linear-gradient(
+    135deg,
+    rgba(123, 92, 255, 0.2),
+    rgba(75, 44, 255, 0.2),
+    rgba(43, 15, 255, 0.2)
+  );
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.login-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #7b5cff,
+    #4b2cff,
+    #2b0fff
+  );
+
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(123, 92, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.login-btn:active {
+  transform: scale(0.98);
+}
