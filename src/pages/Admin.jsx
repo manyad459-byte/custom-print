@@ -1,9 +1,19 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Admin = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+
+  navigate("/login");
+};
 
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -85,13 +95,13 @@ const Admin = () => {
     <div className="flex min-h-screen bg-gradient-to-r from-[#7b5cff] via-[#4b2cff] to-[#2b0fff] text-white">
 
       {/* SIDEBAR */}
-      <div className="w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 p-6">
-
+<div className="w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 p-6 flex flex-col">
         <h2 className="text-2xl font-bold mb-10 text-center">
           🛒 Admin
         </h2>
+      
 
-        {["dashboard", "products", "orders", "users"].map((tab) => (
+        {["dashboard", "products", "orders", "payments","users"].map((tab) => (
           <p
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -104,6 +114,7 @@ const Admin = () => {
             {tab === "dashboard" && "📊 Dashboard"}
             {tab === "products" && "📦 Products"}
             {tab === "orders" && "🧾 Orders"}
+            {tab === "payments" && "💰 Payments"}
             {tab === "users" && "👤 Users"}
           </p>
         ))}
@@ -139,7 +150,17 @@ const Admin = () => {
 
           </div>
         )}
+{/* Push Logout to Bottom */}
+<div className="mt-auto pt-8">
+  <button
+    onClick={handleLogout}
+    className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 transition font-bold"
+  >
+    🚪 Logout
+  </button>
+</div>
 
+</div>
         {/* PRODUCTS */}
         {activeTab === "products" && (
           <div className="space-y-8">
