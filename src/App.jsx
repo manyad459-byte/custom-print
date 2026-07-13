@@ -34,7 +34,7 @@ function AppContent() {
   // user role
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const hideNavbarRoutes = ["/login", "/admin", "/customize"];
+  const hideNavbarRoutes = ["/login", "/admin", "/customize","/register"];
 
   // ✅ FIX: required for Customize page
   const [designs, setDesigns] = useState([]);
