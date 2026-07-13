@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { motion } from "framer-motion";
 
 export default function MyDesigns() {
   const { addToCart: addToCartContext } = useContext(CartContext);
   const [designs, setDesigns] = useState([]);
+  const navigate = useNavigate();
 
   const PRODUCT_PRICES = {
     tshirt: 499,
@@ -55,7 +57,7 @@ export default function MyDesigns() {
     };
 
     addToCartContext(item);
-    window.location.href = "/checkout";
+   navigate("/checkout");
   };
 
   return (
