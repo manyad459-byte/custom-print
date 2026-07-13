@@ -8,7 +8,7 @@ export default function Notifications() {
 
   const clearNotifications = async () => {
     try {
-      await axios.delete("http://localhost:5000/notifications");
+      await axios.delete("https://custom-print-backend.onrender.com/notifications");
       setNotifications([]);
       window.location.reload();
     } catch (err) {
@@ -18,7 +18,7 @@ export default function Notifications() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/notifications")
+      .get("https://custom-print-backend.onrender.com/notifications")
       .then((res) => setNotifications(res.data))
       .catch((err) => console.log(err));
   }, []);

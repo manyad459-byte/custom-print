@@ -10,7 +10,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/register", {
+      const res = await fetch("https://custom-print-backend.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function Register() {
       className="min-h-screen flex items-center justify-center relative px-6"
       style={{
         backgroundImage:
-          "url('http://localhost:5000/image/login-bg.jpg')",
+          "url('https://custom-print-backend.onrender.com/image/login-bg.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

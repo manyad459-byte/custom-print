@@ -140,7 +140,7 @@ export default function Wishlist() {
                 className="overflow-hidden cursor-pointer"
               >
                 <img
-                  src={`http://localhost:5000${item.image}`}
+                  src={`https://custom-print-backend.onrender.com${item.image}`}
                   alt={item.name}
                   className="
                     w-full

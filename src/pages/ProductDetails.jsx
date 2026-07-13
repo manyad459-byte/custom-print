@@ -17,7 +17,7 @@ export default function ProductDetails() {
   // ✅ Fetch single product
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/products/${id}`)
+      .get(`https://custom-print-backend.onrender.com/api/products/${id}`)
       .then((res) => setProduct(res.data))
       .catch((err) => console.log(err));
   }, [id]);
@@ -25,7 +25,7 @@ export default function ProductDetails() {
   // ✅ Fetch all products
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://custom-print-backend.onrender.com/products")
       .then((res) => setAllProducts(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -82,7 +82,7 @@ export default function ProductDetails() {
         {/* IMAGE */}
         <div className="flex justify-center">
           <img
-            src={`http://localhost:5000${product.image}`}
+            src={`https://custom-print-backend.onrender.com${product.image}`}
             alt={product.name}
             className="w-[400px] h-[400px] object-cover rounded-xl hover:scale-105 transition duration-300"
           />
@@ -213,7 +213,7 @@ export default function ProductDetails() {
                   _id: product._id,
                   product: product.name,
                   price: product.price,
-                  preview: `http://localhost:5000${product.image}`,
+                  preview: `https://custom-print-backend.onrender.com${product.image}`,
                   quantity: qty,
                 });
               }}
@@ -229,7 +229,7 @@ export default function ProductDetails() {
                   _id: product._id,
                   product: product.name,
                   price: product.price,
-                  preview: `http://localhost:5000${product.image}`,
+                  preview: `https://custom-print-backend.onrender.com${product.image}`,
                   quantity: qty,
                 });
 
@@ -305,7 +305,7 @@ export default function ProductDetails() {
               >
 
                 <img
-                  src={`http://localhost:5000${item.image}`}
+                  src={`https://custom-print-backend.onrender.com${item.image}`}
                   className="w-full h-[400px] object-cover rounded-md"
                 />
 

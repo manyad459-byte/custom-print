@@ -61,7 +61,7 @@ function Navbar() {
   useEffect(() => {
 
     const fetchNotifications = () => {
-      fetch("http://localhost:5000/notifications")
+      fetch("https://custom-print-backend.onrender.com/notifications")
         .then((res) => res.json())
         .then((data) => setNotifications(data))
         .catch((err) => console.log(err));
@@ -220,8 +220,7 @@ function Navbar() {
 
             <img
               src={
-                user?.image
-                  ? `http://localhost:5000${user.image}`
+                user?.image?`https://custom-print-backend.onrender.com${user.image}`
                   : "/default-user.png"
               }
               alt="profile"

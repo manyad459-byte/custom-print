@@ -29,7 +29,7 @@ function Profile() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/users/get/profile", {
+        const res = await fetch("https://custom-print-backend.onrender.com/api/users/get/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,7 +52,7 @@ function Profile() {
         setLocalUser(cleanUser);  // 🧾 form
 
         if (cleanUser.image) {
-          setPreview(`http://localhost:5000${cleanUser.image}`);
+          setPreview(`https://custom-print-backend.onrender.com${cleanUser.image}`);
         }
 
       } catch (err) {
@@ -97,7 +97,7 @@ function Profile() {
         formData.append("image", imageFile);
       }
 
-      const res = await fetch("http://localhost:5000/api/users/update/profile", {
+      const res = await fetch("https://custom-print-backend.onrender.com/api/users/update/profile", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ function Profile() {
       setLocalUser(cleanUser);  // 🧾 update form
 
       if (cleanUser.image) {
-        setPreview(`http://localhost:5000${cleanUser.image}`);
+        setPreview(`https://custom-print-backend.onrender.com${cleanUser.image}`);
       }
 
       setImageFile(null);

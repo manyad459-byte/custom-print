@@ -19,7 +19,7 @@ export default function Collection() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://custom-print-backend.onrender.com/products")
       .then((res) => {
         setAllProducts(res.data);
 
@@ -171,7 +171,7 @@ export default function Collection() {
               {/* IMAGE */}
               <div className="overflow-hidden">
   <img
-    src={`http://localhost:5000${item.image}`}
+    src={`https://custom-print-backend.onrender.com${item.image}`}
     alt={item.name}
     className="w-full h-64 object-cover transition duration-500 hover:scale-110"
   />

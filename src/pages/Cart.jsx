@@ -70,7 +70,7 @@ export default function Cart() {
     item.preview
       ? item.preview
       : item.image
-      ? `http://localhost:5000${item.image}`
+      ? `https://custom-print-backend.onrender.com${item.image}`
       : "/default-product.png"
   }
   alt={item.product || item.name}

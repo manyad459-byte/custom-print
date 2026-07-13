@@ -15,7 +15,7 @@ export default function Orders() {
       try {console.log("USER DATA:", user);
       
         const res = await axios.get(
-          `http://localhost:5000/orders/${user?.email || "guest"}`
+          `https://custom-print-backend.onrender.com/orders/${user?.email || "guest"}`
         );
         setOrders(res.data);
       } catch (err) {

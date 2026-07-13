@@ -62,7 +62,7 @@ if (!userId)
   return alert("User not logged in ❌");
 
   if (paymentMethod === "COD") {
-    await axios.post("http://localhost:5000/order", {
+    await axios.post("https://custom-print-backend.onrender.com/order", {
   userId,
   customerName,
   phoneNumber,
@@ -86,7 +86,7 @@ if (paymentMethod === "ONLINE") {
   }
 
   const orderData = await axios.post(
-    "http://localhost:5000/create-order",
+    "https://custom-print-backend.onrender.com/create-order",
     {
       amount: total,
     }
@@ -111,7 +111,7 @@ if (paymentMethod === "ONLINE") {
     },
 
     handler: async function (response) {
-      await axios.post("http://localhost:5000/order", {
+      await axios.post("https://custom-print-backend.onrender.com/order", {
         userId,
         customerName,
         phoneNumber,
@@ -131,7 +131,7 @@ if (paymentMethod === "ONLINE") {
     );
 
     if (demo) {
-      await axios.post("http://localhost:5000/order", {
+      await axios.post("https://custom-print-backend.onrender.com/order", {
         userId,
         customerName,
         phoneNumber,
@@ -202,7 +202,7 @@ return;
       : item.image
       ? item.image.startsWith("http")
         ? item.image
-        : `http://localhost:5000${item.image}`
+        : `//https://custom-print-backend.onrender.com${item.image}`
       : "/default-product.png"
   }
   alt={item.name}

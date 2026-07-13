@@ -32,17 +32,17 @@ const Admin = () => {
   }
 
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:5000/products");
+    const res = await axios.get("https://custom-print-backend.onrender.com/products");
     setProducts(res.data);
   };
 
   const fetchOrders = async () => {
-    const res = await axios.get("http://localhost:5000/orders");
+    const res = await axios.get("https://custom-print-backend.onrender.com/orders");
     setOrders(res.data);
   };
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:5000/users");
+    const res = await axios.get("https://custom-print-backend.onrender.com/users");
     setUsers(res.data);
   };
 
@@ -56,9 +56,9 @@ const Admin = () => {
     if (image) formData.append("image", image);
 
     if (editingId) {
-      await axios.put(`http://localhost:5000/product/${editingId}`, formData);
+      await axios.put(`https://custom-print-backend.onrender.com/product/${editingId}`, formData);
     } else {
-      await axios.post("http://localhost:5000/add-product", formData);
+      await axios.post("https://custom-print-backend.onrender.com/add-product", formData);
     }
 
     setName("");
@@ -70,7 +70,7 @@ const Admin = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/product/${id}`);
+    await axios.delete(`https://custom-print-backend.onrender.com/product/${id}`);
     fetchProducts();
   };
 
@@ -195,7 +195,7 @@ const Admin = () => {
                 >
 
                   <img
-                    src={`http://localhost:5000${item.image}`}
+                    src={`https://custom-print-backend.onrender.com${item.image}`}
                     className="w-full h-40 object-cover rounded-xl"
                   />
 
@@ -245,7 +245,7 @@ const Admin = () => {
             onChange={async (e) => {
               try {
                 await axios.put(
-                  `http://localhost:5000/orders/${order._id}/status`,
+                  `https://custom-print-backend.onrender.com/orders/${order._id}/status`,
                   {
                     status: e.target.value,
                   }

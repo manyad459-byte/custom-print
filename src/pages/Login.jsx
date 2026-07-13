@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("https://custom-print-backend.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,7 +21,8 @@ export default function Login() {
       });
 
       const data = await res.json();
-
+     console.log("LOGIN RESPONSE:", data);
+     
       if (!res.ok) {
         alert(data.message || "Invalid email or password");
         return;
@@ -31,7 +32,7 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.user.email);
 
-      if (data.user?.role === "admin") {
+      if ((data.user?.role || "").toLowerCase() === "admin"){
         navigate("/admin");
       } else {
         navigate("/");
@@ -47,7 +48,7 @@ export default function Login() {
   <div
     className="min-h-screen flex items-center justify-center bg-cover bg-center relative px-4"
     style={{
-      backgroundImage: "url('http://localhost:5000/image/login-bg.jpg')",
+      backgroundImage: "url('https://custom-print-backend.onrender.com/image/login-bg.jpg')",
     }}
   >
     
