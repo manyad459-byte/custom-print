@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const Admin = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -26,6 +36,57 @@ const handleLogout = () => {
 
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
+  const totalRevenue = orders.reduce(
+  (sum, order) => sum + (order.totalAmount || 0),
+  0
+);
+
+const deliveredRevenue = orders
+  .filter((order) => order.status === "Delivered")
+  .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+const pendingRevenue = orders
+  .filter((order) => order.status !== "Delivered")
+  .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+const paidOrders = orders.filter(
+  (order) =>
+    order.paymentMethod &&
+    order.paymentMethod.toUpperCase() === "ONLINE"
+).length;
+
+const codOrders = orders.filter(
+  (order) =>
+    order.paymentMethod &&
+    order.paymentMethod.toUpperCase() === "COD"
+).length;
+const chartData = [
+  {
+    name: "Revenue",
+    amount: totalRevenue,
+  },
+  {
+    name: "Delivered",
+    amount: deliveredRevenue,
+  },
+  {
+    name: "Pending",
+    amount: pendingRevenue,
+  },
+];
+const deliveredOrders = orders.filter(
+  (order) => order.status === "Delivered"
+).length;
+
+const pendingOrders = orders.filter(
+  (order) => order.status !== "Delivered"
+).length;
+
+const totalProducts = products.length;
+
+const totalCustomers = users.filter(
+  (u) => u.role !== "admin"
+).length;
 
   useEffect(() => {
     fetchProducts();
@@ -77,12 +138,29 @@ const handleLogout = () => {
     setImage(null);
     setEditingId(null);
     fetchProducts();
+    await fetchProducts();
+
+if (editingId) {
+  toast.success("✅ Product updated successfully!");
+} else {
+  toast.success("✅ Product added successfully!");
+}
   };
 
-  const handleDelete = async (id) => {
-    await axios.delete(`https://custom-print-backend.onrender.com/product/${id}`);
-    fetchProducts();
-  };
+ const handleDelete = async (id) => {
+  try {
+    await axios.delete(
+      `https://custom-print-backend.onrender.com/product/${id}`
+    );
+
+    await fetchProducts();
+
+    toast.success("🗑️ Product deleted successfully!");
+  } catch (err) {
+    toast.error("Failed to delete product!");
+    console.log(err);
+  }
+};
 
   const editProduct = (item) => {
     setEditingId(item._id);
@@ -93,7 +171,7 @@ const handleLogout = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-[#7b5cff] via-[#4b2cff] to-[#2b0fff] text-white">
-
+<Toaster position="top-right" />
       {/* SIDEBAR */}
 <div className="w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 p-6 flex flex-col">
         <h2 className="text-2xl font-bold mb-10 text-center">
@@ -119,39 +197,7 @@ const handleLogout = () => {
           </p>
         ))}
 
-      </div>
-
-      {/* MAIN */}
-      <div className="flex-1 overflow-y-auto p-6">
-
-        {/* HEADER */}
-        <h2 className="text-2xl font-bold mb-6 uppercase">
-          {activeTab}
-        </h2>
-
-        {/* DASHBOARD */}
-        {activeTab === "dashboard" && (
-          <div className="grid md:grid-cols-3 gap-6">
-
-            <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl text-center border border-white/20">
-              <h3 className="text-xl">Products</h3>
-              <p className="text-3xl font-bold mt-2">{products.length}</p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl text-center border border-white/20">
-              <h3 className="text-xl">Orders</h3>
-              <p className="text-3xl font-bold mt-2">{orders.length}</p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl text-center border border-white/20">
-              <h3 className="text-xl">Users</h3>
-              <p className="text-3xl font-bold mt-2">{users.length}</p>
-            </div>
-
-          </div>
-        )}
-{/* Push Logout to Bottom */}
-<div className="mt-auto pt-8">
+<div className="mt-auto pt-6">
   <button
     onClick={handleLogout}
     className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 transition font-bold"
@@ -159,13 +205,74 @@ const handleLogout = () => {
     🚪 Logout
   </button>
 </div>
-
 </div>
+      {/* MAIN */}
+      <div className="flex-1 overflow-y-auto p-6">
+
+        {/* HEADER */}
+        <h2 className="text-2xl font-bold mb-6 uppercase">
+          {activeTab}
+        </h2>
+<div className="w-full">
+        {/* DASHBOARD */}
+        {activeTab === "dashboard" && (
+  <div className="grid md:grid-cols-3 gap-6">
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">📦 Products</h3>
+      <p className="text-4xl font-bold mt-3">{totalProducts}</p>
+    </div>
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">🧾 Orders</h3>
+      <p className="text-4xl font-bold mt-3">{orders.length}</p>
+    </div>
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">👤 Customers</h3>
+      <p className="text-4xl font-bold mt-3">{totalCustomers}</p>
+    </div>
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">💰 Revenue</h3>
+      <p className="text-4xl font-bold mt-3">₹{totalRevenue}</p>
+    </div>
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">✅ Delivered</h3>
+      <p className="text-4xl font-bold mt-3">{deliveredOrders}</p>
+    </div>
+
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+      <h3 className="text-lg">⏳ Pending</h3>
+      <p className="text-4xl font-bold mt-3">{pendingOrders}</p>
+    </div>
+    <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 mt-8">
+  <h3 className="text-2xl font-bold mb-6">
+    📊 Sales Analytics
+  </h3>
+
+  <ResponsiveContainer width="100%" height={350}>
+    <BarChart data={chartData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" stroke="#fff" />
+      <YAxis stroke="#fff" />
+      <Tooltip />
+      <Bar dataKey="amount" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+
+  </div>
+)}
+      
         {/* PRODUCTS */}
         {activeTab === "products" && (
-          <div className="space-y-8">
+<div className="flex gap-8 h-[80vh]">
+  
 
             {/* FORM */}
+            <div className="w-[380px] sticky top-6 self-start">
             <form
               onSubmit={handleSubmit}
               className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 max-w-xl space-y-3"
@@ -205,9 +312,12 @@ const handleLogout = () => {
                 {editingId ? "Update Product" : "Add Product"}
               </button>
             </form>
+            </div>
 
             {/* PRODUCTS GRID */}
-            <div className="grid md:grid-cols-4 gap-6">
+            {/* PRODUCTS GRID */}
+<div className="flex-1 overflow-y-auto pr-2">
+  <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-6">
 
               {products.map((item) => (
                 <div
@@ -234,10 +344,10 @@ const handleLogout = () => {
                     </button>
 
                   </div>
-
-                </div>
+                    </div>
+               
               ))}
-
+ </div>
             </div>
 
           </div>
@@ -291,27 +401,162 @@ const handleLogout = () => {
     ))}
 
   </div>
+
+)}
+</div>
+{/* PAYMENTS */}
+{activeTab === "payments" && (
+  <div className="space-y-8">
+
+    <div className="grid md:grid-cols-3 gap-40">
+
+      <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+        <h3 className="text-lg font-bold">💰 Total Revenue</h3>
+        <p className="text-3xl font-bold mt-3">₹{totalRevenue}</p>
+      </div>
+
+      <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+        <h3 className="text-lg font-bold">✅ Delivered Revenue</h3>
+        <p className="text-3xl font-bold mt-3">₹{deliveredRevenue}</p>
+      </div>
+
+      <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+        <h3 className="text-lg font-bold">⏳ Pending Revenue</h3>
+        <p className="text-3xl font-bold mt-3">₹{pendingRevenue}</p>
+      </div>
+
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+
+      <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+        <h3 className="text-lg font-bold">💳 Razorpay Payments</h3>
+        <p className="text-3xl font-bold mt-3">{paidOrders}</p>
+      </div>
+
+      <div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+        <h3 className="text-lg font-bold">💵 Cash on Delivery</h3>
+        <p className="text-3xl font-bold mt-3">{codOrders}</p>
+      </div>
+      </div>
+      
+{/* PAYMENT HISTORY */}
+<div className="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20">
+
+  <h3 className="text-2xl font-bold mb-5">
+    💳 Payment History
+  </h3>
+
+  <div className="overflow-x-auto">
+
+    <table className="w-full text-left">
+
+      <thead>
+        <tr className="border-b border-white/20">
+          <th className="py-3">Customer</th>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Order Status</th>
+          <th>Payment</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {orders.map((order) => (
+
+          <tr
+            key={order._id}
+            className="border-b border-white/10"
+          >
+            <td className="py-4">{order.userId}</td>
+
+            <td>₹{order.totalAmount}</td>
+
+            <td>{order.paymentMethod}</td>
+
+            <td>{order.status}</td>
+
+            <td>
+              {order.paymentMethod === "ONLINE" ? (
+                <span className="text-green-400 font-bold">
+                  Paid
+                </span>
+              ) : (
+                <span className="text-yellow-300 font-bold">
+                  Pending
+                </span>
+              )}
+            </td>
+
+          </tr>
+
+        ))}
+
+      </tbody>
+
+    </table>
+
+  </div>
+    </div>
+
+  </div>
+  
+
+
+
 )}
 
         {/* USERS */}
         {activeTab === "users" && (
-          <div className="space-y-4">
+          <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 overflow-hidden">
 
-            {users.map((u, i) => (
-              <div
-                key={i}
-                className="bg-white/10 backdrop-blur-xl p-5 rounded-3xl border border-white/20"
-              >
-                <p><b>{u.name}</b></p>
-                <p className="text-white/70">{u.email}</p>
-              </div>
-            ))}
+  <table className="w-full">
 
-          </div>
+    <thead className="bg-white/10">
+      <tr>
+        <th className="text-left p-4">Name</th>
+        <th className="text-left p-4">Email</th>
+        <th className="text-left p-4">Role</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {users.map((u, i) => (
+        <tr
+          key={i}
+          className="border-t border-white/10 hover:bg-white/5 transition"
+        >
+          <td className="p-4 font-semibold">
+            {u.name}
+          </td>
+
+          <td className="p-4 text-white/70">
+            {u.email}
+          </td>
+
+          <td className="p-4">
+            <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-300 text-sm">
+              {u.role || "Customer"}
+            </span>
+          </td>
+        </tr>
+      ))}
+
+    </tbody>
+
+  </table>
+
+</div>
+
+           
+
+         
         )}
-
+</div>
       </div>
-    </div>
+  
   );
 };
 
